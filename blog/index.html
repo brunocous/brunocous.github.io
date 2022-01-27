@@ -1,0 +1,58 @@
+---
+layout: default
+title: blog
+pagination:
+  enabled: true
+  collection: medium_posts
+  permalink: /page/:num/
+  per_page: 3
+  sort_field: date
+  sort_reverse: true
+  trail:
+    before: 1 # The number of links before the current page
+    after: 3  # The number of links after the current page
+---
+
+<div class="post">
+
+  <div class="header-bar">
+    <h1>{{ site.blog_name }}</h1>
+    <h2>{{ site.blog_description }}</h2>
+  </div>
+
+
+  <ul class="post-list">
+    {% for post in site.medium_posts %}
+    {% assign year = post.date | date: "%Y" %}
+    {% assign categories = post.categories | join: "" %}
+
+
+    {% assign read_time = post.feed_content | number_of_words | divided_by: 180 | plus: 1 %}
+
+    <li>
+      <h3><a class="post-title" href="{{ post.medium_link }}">{{ post.title }}</a>
+      </h3>
+      <!-- <p>{{ post.feed_content }}</p> -->
+      <p class="post-meta"> {{read_time}} min read &nbsp; &middot; &nbsp;
+        {{ post.date | date: '%B %-d, %Y' }}
+      </p>
+      <p class="post-tags">
+        <a href="{{ year }}">
+          <i class="fas fa-calendar fa-sm"></i> {{ year }} </a>
+
+          {% if categories != "" %}
+          &nbsp; &middot; &nbsp;
+            {% for category in post.categories %}
+            <a href="{{ category }}">
+              <i class="fas fa-tag fa-sm"></i> {{ category }}</a> &nbsp;
+              {% endfor %}
+          {% endif %}
+    </p>
+    </li>
+
+    {% endfor %}
+  </ul>
+
+  {% include pagination.html %}
+
+</div>
